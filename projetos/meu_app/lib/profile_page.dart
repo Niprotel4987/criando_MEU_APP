@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'preferencias_service.dart'; // Para limpar o login
+import 'preferencias_service.dart';
 import 'login_page.dart';
+import 'estoque_page.dart'; // IMPORTANTE: Importar a nova página
 
 class ProfilePage extends StatelessWidget {
   final String user;
@@ -20,33 +21,45 @@ class ProfilePage extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Um ícone de avatar para dar um charme
               const CircleAvatar(
-                radius: 50,
+                radius: 40,
                 backgroundColor: Colors.blueAccent,
-                child: Icon(Icons.person, size: 60, color: Colors.white),
+                child: Icon(Icons.person, size: 50, color: Colors.white),
               ),
-              const SizedBox(height: 20),
-              Text(
-                "Bem-vindo, $user!",
-                style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-              ),
-              const Text(
-                "Você está logado no sistema.",
-                style: TextStyle(color: Colors.grey),
-              ),
-              const SizedBox(height: 50),
-              
-              // BOTÃO DE LOGOUT ESTILIZADO
+              const SizedBox(height: 15),
+              Text("Bem-vindo, $user!", style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+              const SizedBox(height: 30),
+
+              // NOVO BOTÃO: ACESSAR ESTOQUE
               SizedBox(
-                width: 200,
+                width: 250,
+                height: 50,
+                child: ElevatedButton.icon(
+                  onPressed: () {
+                    // Navega para a tela de estoque
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const EstoquePage()),
+                    );
+                  },
+                  icon: const Icon(Icons.warehouse),
+                  label: const Text("CONSULTAR ESTOQUE"),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blueGrey,
+                    foregroundColor: Colors.white,
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 20),
+
+              // BOTÃO DE SAIR (Já tínhamos)
+              SizedBox(
+                width: 250,
                 height: 50,
                 child: ElevatedButton.icon(
                   onPressed: () async {
-                    // 1. Limpa o nome salvo no celular (Permanentemente)
                     await PreferenciasService.limpar();
-                    
-                    // 2. Volta para a tela de login removendo todas as telas anteriores
                     if (!context.mounted) return;
                     Navigator.pushAndRemoveUntil(
                       context,
@@ -54,14 +67,11 @@ class ProfilePage extends StatelessWidget {
                       (route) => false,
                     );
                   },
-                  icon: const Icon(Icons.logout, color: Colors.white),
-                  label: const Text("SAIR DO APP", style: TextStyle(color: Colors.white)),
+                  icon: const Icon(Icons.logout),
+                  label: const Text("SAIR DO APP"),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.redAccent, // Cor de alerta
-                    elevation: 5, // Sombra
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30), // Bordas arredondadas
-                    ),
+                    backgroundColor: Colors.redAccent,
+                    foregroundColor: Colors.white,
                   ),
                 ),
               ),
